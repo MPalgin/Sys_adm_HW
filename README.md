@@ -57,3 +57,5 @@
 6.3[Docker](6-3.md)
 
 6.4[Docker часть 2](6-4.md)
+
+6.5[Kubernetes](6-5.md)
