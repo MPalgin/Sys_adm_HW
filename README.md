@@ -64,6 +64,6 @@
 
 7.1[Ansible](7-1.md)
 
-7.2[Ansible часть 2](7-1_2.md)
+7.2[Ansible часть 2](7-12.md)
 
 7.3[Terraform](7-2.md)
