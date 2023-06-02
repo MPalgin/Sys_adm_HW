@@ -67,3 +67,5 @@
 7.2[Ansible часть 2](7-12.md)
 
 7.3[Terraform](7-2.md)
+
+7.4[Git](7-3.md)
