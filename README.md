@@ -85,3 +85,7 @@
 8.4 [Система мониторинга Prometheus](8-4.md)
 
 8.5 [Система мониторинга Prometheus. Часть2](8-5.md)
+
+### Модуль 9: Отказоустойчивость
+
+9.1 [Disaster Recovery. FHRP и Keepalived](9-1.md)
