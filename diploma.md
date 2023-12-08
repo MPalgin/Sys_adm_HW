@@ -1,4 +1,4 @@
-
+```
 resource "yandex_compute_instance" "secvm" {
   name = "secvm"
 
@@ -219,3 +219,4 @@ output "internal_ip_address_vm_1" {
 output "external_ip_address_vm_1" {
   value = yandex_compute_instance.webvm1.network_interface.0.nat_ip_address
 }
+```
