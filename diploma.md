@@ -16,8 +16,14 @@ resource "yandex_compute_instance" "secvm" {
   network_interface {
     subnet_id = yandex_vpc_subnet.bastion-external-segment.id
     nat       = true
+    security_group_ids = [yandex_vpc_security_group.secure-bastion-sg.id]
   }
-
+  network_interface {
+    subnet_id = yandex_vpc_subnet.bastion-internal-segment.id
+    nat       = false
+    ip_address = "172.16.16.254"
+    security_group_ids = [yandex_vpc_security_group.internal-bastion-sg.id]
+  }
   metadata = {
     user-data = "${file("/home/mpalgin/learning/terraform/meta.txt")}"
   }
@@ -38,6 +44,7 @@ resource "yandex_compute_instance" "webvm1" {
   network_interface {
     subnet_id = yandex_vpc_subnet.bastion-internal-segment.id
     nat       = true
+    security_group_ids = [yandex_vpc_security_group.secure-bastion-sg.id]
   }
 
   metadata = {
@@ -46,6 +53,7 @@ resource "yandex_compute_instance" "webvm1" {
 }
 resource "yandex_compute_instance" "webvm2" {
   name = "webvm2"
+  zone           = "ru-central1-b"
   resources {
     cores  = 2
     memory = 2
@@ -60,6 +68,7 @@ resource "yandex_compute_instance" "webvm2" {
   network_interface {
     subnet_id = yandex_vpc_subnet.bastion-internal-segment-zoneb.id
     nat       = true
+    security_group_ids = [yandex_vpc_security_group.secure-bastion-sg.id]
   }
 
   metadata = {
@@ -129,7 +138,7 @@ resource "yandex_alb_target_group" "targetvmgroup" {
   }
 
   target {
-    subnet_id    = yandex_vpc_subnet.bastion-internal-segment.id
+    subnet_id    = yandex_vpc_subnet.bastion-internal-segment-zoneb.id
     ip_address   = yandex_compute_instance.webvm2.network_interface.0.ip_address
   }
 
@@ -189,10 +198,6 @@ resource "yandex_alb_load_balancer" "web-balancer" {
   allocation_policy {
     location {
       zone_id   = "ru-central1-a"
-      subnet_id = yandex_vpc_subnet.bastion-external-segment.id
-    }
-    location {
-      zone_id   = "ru-central1-b"
       subnet_id = yandex_vpc_subnet.bastion-external-segment.id
     }
   }
