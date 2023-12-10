@@ -18,12 +18,12 @@ resource "yandex_compute_instance" "secvm" {
     nat       = true
     security_group_ids = [yandex_vpc_security_group.secure-bastion-sg.id]
   }
-  network_interface {
-    subnet_id = yandex_vpc_subnet.bastion-internal-segment.id
-    nat       = false
-    ip_address = "172.16.16.254"
-    security_group_ids = [yandex_vpc_security_group.internal-bastion-sg.id]
-  }
+//  network_interface {
+//    subnet_id = yandex_vpc_subnet.bastion-internal-segment.id
+//    nat       = false
+//    ip_address = "172.16.16.254"
+//    security_group_ids = [yandex_vpc_security_group.internal-bastion-sg.id]
+//  }
   metadata = {
     user-data = "${file("/home/mpalgin/learning/terraform/meta.txt")}"
   }
@@ -43,8 +43,8 @@ resource "yandex_compute_instance" "webvm1" {
 
   network_interface {
     subnet_id = yandex_vpc_subnet.bastion-internal-segment.id
-    nat       = true
-    security_group_ids = [yandex_vpc_security_group.secure-bastion-sg.id]
+    nat       = false
+    security_group_ids = [yandex_vpc_security_group.internal-bastion-sg.id]
   }
 
   metadata = {
@@ -67,8 +67,8 @@ resource "yandex_compute_instance" "webvm2" {
 
   network_interface {
     subnet_id = yandex_vpc_subnet.bastion-internal-segment-zoneb.id
-    nat       = true
-    security_group_ids = [yandex_vpc_security_group.secure-bastion-sg.id]
+    nat       = false
+    security_group_ids = [yandex_vpc_security_group.internal-bastion-sg-zoneb.id]
   }
 
   metadata = {
@@ -121,6 +121,22 @@ resource "yandex_vpc_security_group" "internal-bastion-sg"{
     to_port = 22
     protocol = "tcp"
     v4_cidr_blocks = ["172.16.16.254/32"]
+  }
+  egress{
+    from_port = 22
+    to_port = 22
+    protocol = "tcp"
+    predefined_target = "self_security_group"
+  }
+}
+resource "yandex_vpc_security_group" "internal-bastion-sg-zoneb"{
+  name = "internal-bastion-sg-zoneb"
+  network_id     = yandex_vpc_network.internal-bastion-network.id
+  ingress{
+    from_port = 22
+    to_port = 22
+    protocol = "tcp"
+    v4_cidr_blocks = ["172.16.17.254/32"]
   }
   egress{
     from_port = 22
