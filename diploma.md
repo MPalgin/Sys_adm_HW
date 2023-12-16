@@ -1,20 +1,4 @@
 ```
-terraform {
-  required_providers {
-    yandex = {
-      source = "yandex-cloud/yandex"
-    }
-  }
-}
-
-provider "yandex" {
-  token     = "y0_AgAAAAAiXYvGAATuwQAAAADkyuF4WodlCW2pR42IXXru0lK4eZVV-xI"
-  cloud_id  = "ajeipfn12logma3n52or"
-  folder_id = "b1g9a0rjuljkrv5p819s"
-  zone      = "ru-central1-a"
-}
-
-
 resource "yandex_compute_instance" "secvm" {
   name = "secvm"
 
