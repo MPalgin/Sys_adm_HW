@@ -1,4 +1,20 @@
 ```
+terraform {
+  required_providers {
+    yandex = {
+      source = "yandex-cloud/yandex"
+    }
+  }
+}
+
+provider "yandex" {
+  token     = "y0_AgAAAAAiXYvGAATuwQAAAADkyuF4WodlCW2pR42IXXru0lK4eZVV-xI"
+  cloud_id  = "ajeipfn12logma3n52or"
+  folder_id = "b1g9a0rjuljkrv5p819s"
+  zone      = "ru-central1-a"
+}
+
+
 resource "yandex_compute_instance" "secvm" {
   name = "secvm"
 
@@ -9,7 +25,7 @@ resource "yandex_compute_instance" "secvm" {
 
   boot_disk {
     initialize_params {
-      image_id = "fd87kbts7j40q5b9rpjr"
+      image_id = "fd84nt41ssoaapgql97p"
     }
   }
 
@@ -18,12 +34,6 @@ resource "yandex_compute_instance" "secvm" {
     nat       = true
     security_group_ids = [yandex_vpc_security_group.secure-bastion-sg.id]
   }
-//  network_interface {
-//    subnet_id = yandex_vpc_subnet.bastion-internal-segment.id
-//    nat       = false
-//    ip_address = "172.16.16.254"
-//    security_group_ids = [yandex_vpc_security_group.internal-bastion-sg.id]
-//  }
   metadata = {
     user-data = "${file("/home/mpalgin/learning/terraform/meta.txt")}"
   }
@@ -37,14 +47,13 @@ resource "yandex_compute_instance" "webvm1" {
 
   boot_disk {
     initialize_params {
-      image_id = "fd87kbts7j40q5b9rpjr"
+      image_id = "fd84nt41ssoaapgql97p"
     }
   }
 
   network_interface {
-    subnet_id = yandex_vpc_subnet.bastion-internal-segment.id
+    subnet_id = yandex_vpc_subnet.bastion-internal-segment-zonea.id
     nat       = false
-    security_group_ids = [yandex_vpc_security_group.internal-bastion-sg.id]
   }
 
   metadata = {
@@ -61,20 +70,89 @@ resource "yandex_compute_instance" "webvm2" {
 
   boot_disk {
     initialize_params {
-      image_id = "fd87kbts7j40q5b9rpjr"
+      image_id = "fd84nt41ssoaapgql97p"
     }
   }
 
   network_interface {
     subnet_id = yandex_vpc_subnet.bastion-internal-segment-zoneb.id
     nat       = false
-    security_group_ids = [yandex_vpc_security_group.internal-bastion-sg-zoneb.id]
   }
 
   metadata = {
     user-data = "${file("/home/mpalgin/learning/terraform/meta.txt")}"
   }
 }
+resource "yandex_compute_instance" "zabbix-vm" {
+  name = "zabbix-vm"
+  zone           = "ru-central1-a"
+  resources {
+    cores  = 2
+    memory = 2
+  }
+
+  boot_disk {
+    initialize_params {
+      image_id = "fd84nt41ssoaapgql97p"
+    }
+  }
+
+  network_interface {
+    subnet_id = yandex_vpc_subnet.bastion-external-segment.id
+    nat       = false
+  }
+
+  metadata = {
+    user-data = "${file("/home/mpalgin/learning/terraform/meta.txt")}"
+  }
+}
+resource "yandex_compute_instance" "elastic-vm" {
+  name = "elastic-vm"
+  zone           = "ru-central1-a"
+  resources {
+    cores  = 2
+    memory = 2
+  }
+
+  boot_disk {
+    initialize_params {
+      image_id = "fd84nt41ssoaapgql97p"
+    }
+  }
+
+  network_interface {
+    subnet_id = yandex_vpc_subnet.bastion-internal-segment-zonea.id
+    nat       = false
+  }
+
+  metadata = {
+    user-data = "${file("/home/mpalgin/learning/terraform/meta.txt")}"
+  }
+}
+resource "yandex_compute_instance" "kibana-vm" {
+  name = "kibana-vm"
+  zone           = "ru-central1-a"
+  resources {
+    cores  = 2
+    memory = 2
+  }
+
+  boot_disk {
+    initialize_params {
+      image_id = "fd84nt41ssoaapgql97p"
+    }
+  }
+
+  network_interface {
+    subnet_id = yandex_vpc_subnet.bastion-external-segment.id
+    nat       = false
+  }
+
+  metadata = {
+    user-data = "${file("/home/mpalgin/learning/terraform/meta.txt")}"
+  }
+}
+
 resource "yandex_vpc_network" "external-bastion-network" {
   name = "external-bastion-network"
 }
@@ -83,7 +161,7 @@ resource "yandex_vpc_subnet" "bastion-external-segment" {
   name           = "bastion-external-segment"
   zone           = "ru-central1-a"
   network_id     = yandex_vpc_network.external-bastion-network.id
-  v4_cidr_blocks = ["172.16.17.0/28"]
+  v4_cidr_blocks = ["172.16.17.0/24"]
 }
 
 resource "yandex_vpc_security_group" "secure-bastion-sg"{
@@ -95,61 +173,32 @@ resource "yandex_vpc_security_group" "secure-bastion-sg"{
     protocol = "tcp"
     v4_cidr_blocks = ["0.0.0.0/0"]
   }
-}
-resource "yandex_vpc_network" "internal-bastion-network" {
-  name = "internal-bastion-network"
+  egress{
+    from_port = 0
+    to_port = 65535
+    protocol = "any"
+    v4_cidr_blocks = ["0.0.0.0/0"]
+
+  }
 }
 
-resource "yandex_vpc_subnet" "bastion-internal-segment" {
-  name           = "bastion-internal-segment"
+resource "yandex_vpc_subnet" "bastion-internal-segment-zonea" {
+  name           = "bastion-internal-segment-zonea"
   zone           = "ru-central1-a"
-  network_id     = yandex_vpc_network.internal-bastion-network.id
+  network_id     = yandex_vpc_network.external-bastion-network.id
   v4_cidr_blocks = ["172.16.16.0/24"]
 }
-
 resource "yandex_vpc_subnet" "bastion-internal-segment-zoneb" {
   name           = "bastion-internal-segment-zoneb"
   zone           = "ru-central1-b"
-  network_id     = yandex_vpc_network.internal-bastion-network.id
-  v4_cidr_blocks = ["172.17.16.0/24"]
-}
-resource "yandex_vpc_security_group" "internal-bastion-sg"{
-  name = "internal-bastion-sg"
-  network_id     = yandex_vpc_network.internal-bastion-network.id
-  ingress{
-    from_port = 22
-    to_port = 22
-    protocol = "tcp"
-    v4_cidr_blocks = ["172.16.16.254/32"]
-  }
-  egress{
-    from_port = 22
-    to_port = 22
-    protocol = "tcp"
-    predefined_target = "self_security_group"
-  }
-}
-resource "yandex_vpc_security_group" "internal-bastion-sg-zoneb"{
-  name = "internal-bastion-sg-zoneb"
-  network_id     = yandex_vpc_network.internal-bastion-network.id
-  ingress{
-    from_port = 22
-    to_port = 22
-    protocol = "tcp"
-    v4_cidr_blocks = ["172.16.17.254/32"]
-  }
-  egress{
-    from_port = 22
-    to_port = 22
-    protocol = "tcp"
-    predefined_target = "self_security_group"
-  }
+  network_id     = yandex_vpc_network.external-bastion-network.id
+  v4_cidr_blocks = ["172.16.18.0/24"]
 }
 resource "yandex_alb_target_group" "targetvmgroup" {
   name           = "targetvmgroup"
 
   target {
-    subnet_id    = yandex_vpc_subnet.bastion-internal-segment.id
+    subnet_id    = yandex_vpc_subnet.bastion-internal-segment-zonea.id
     ip_address   = yandex_compute_instance.webvm1.network_interface.0.ip_address
   }
 
