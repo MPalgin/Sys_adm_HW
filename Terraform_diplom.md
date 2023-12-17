@@ -9,7 +9,7 @@ resource "yandex_compute_instance" "secvm" {
 
   boot_disk {
     initialize_params {
-      image_id = "fd84nt41ssoaapgql97p"
+      image_id = "fd836fv86ftfupovv972"
     }
   }
 
@@ -157,6 +157,18 @@ resource "yandex_vpc_security_group" "secure-bastion-sg"{
     protocol = "tcp"
     v4_cidr_blocks = ["0.0.0.0/0"]
   }
+    ingress{
+    from_port = 80
+    to_port = 80
+    protocol = "tcp"
+    v4_cidr_blocks = ["0.0.0.0/0"]
+  }
+    ingress{
+    from_port = 443
+    to_port = 443
+    protocol = "tcp"
+    v4_cidr_blocks = ["0.0.0.0/0"]
+  }
   egress{
     from_port = 0
     to_port = 65535
@@ -178,6 +190,16 @@ resource "yandex_vpc_subnet" "bastion-internal-segment-zoneb" {
   network_id     = yandex_vpc_network.external-bastion-network.id
   v4_cidr_blocks = ["172.16.18.0/24"]
 }
+
+resource "yandex_vpc_route_table" "nat-instance-route" {
+  name       = "nat-instance-route"
+  network_id = yandex_vpc_network.external-bastion-network.id
+  static_route {
+    destination_prefix = "0.0.0.0/0"
+    next_hop_address   = yandex_compute_instance.nat-instance.network_interface.0.ip_address
+  }
+}
+
 resource "yandex_alb_target_group" "targetvmgroup" {
   name           = "targetvmgroup"
 
