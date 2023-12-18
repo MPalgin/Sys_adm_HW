@@ -64,6 +64,9 @@ Ansible playbook:
 * Connection #0 to host 158.160.137.200 left intact
 
 ```
+Zabbix сервер с метриками:
+
+![image](https://github.com/MPalgin/Sys_adm_HW/assets/121052923/5370c734-8b87-4a9f-bf3c-61dc280cf81c)
 
 
 
