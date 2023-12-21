@@ -133,6 +133,12 @@ ansible_ssh_common_args='-o ProxyCommand="ssh -p 22 -W %h:%p -q user@secvm.ru-ce
 
 ```
 Zabbix сервер с метриками:
+
+http://158.160.125.94/zabbix/
+
+User: Admin
+Pass:zabbix
+
 ![image](https://github.com/MPalgin/Sys_adm_HW/assets/121052923/53495121-ec3b-4480-b92b-4b1523153ada)
 
 ![image](https://github.com/MPalgin/Sys_adm_HW/assets/121052923/44f7f9f6-95e6-4ba1-b1cc-81b202d998c4)
