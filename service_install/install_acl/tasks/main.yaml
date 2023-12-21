@@ -3,8 +3,6 @@
       name:
         - acl
         - apache2
-        # - zabbix-sql-scripts
-        # - zabbix-apache-conf
         - php8.1-pgsql
         - zabbix-frontend-php
       state: present
