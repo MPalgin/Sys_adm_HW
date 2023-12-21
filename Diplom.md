@@ -145,6 +145,8 @@ Pass:zabbix
 
 elastic_server:
 
+http://158.160.113.33:5601/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!t,value:60000),time:(from:now-15m,to:now))&_a=(columns:!(),filters:!(),index:'463eaf74-f060-4100-9ff1-9d8d2b63afc4',interval:auto,query:(language:kuery,query:''),sort:!(!('@timestamp',desc)))
+
 ![image](https://github.com/MPalgin/Sys_adm_HW/assets/121052923/e6209dc8-f91e-4665-a2ea-04b3c067a1b8)
 
 Расписание создания snapshot дисков:
