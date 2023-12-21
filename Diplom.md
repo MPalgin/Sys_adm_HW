@@ -73,6 +73,10 @@ elastic_server:
 
 ![image](https://github.com/MPalgin/Sys_adm_HW/assets/121052923/e6209dc8-f91e-4665-a2ea-04b3c067a1b8)
 
+Расписание создания snapshot дисков:
+
+![image](https://github.com/MPalgin/Sys_adm_HW/assets/121052923/4d809fc2-3aa4-4748-ab26-90622aba1027)
+
 
 
 
