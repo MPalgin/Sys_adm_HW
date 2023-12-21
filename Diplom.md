@@ -3,7 +3,9 @@ https://github.com/MPalgin/Sys_adm_HW/blob/main/Terraform_diplom.md
 
 Ansible playbook:
 
+https://github.com/MPalgin/Sys_adm_HW/tree/main/service_install
 Проверка работы балансировщика:
+
 ```
 </html>mpalgin@mpalgin-VirtualBox:~$ curl -v 158.160.136.130:80
 *   Trying 158.160.136.130:80...
