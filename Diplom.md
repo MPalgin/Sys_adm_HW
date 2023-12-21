@@ -68,7 +68,9 @@ ansible_ssh_common_args='-o ProxyCommand="ssh -p 22 -W %h:%p -q user@secvm.ru-ce
 
 Доступность проверялась с помощью ssh туннелей.
 
+
 Проверка работы балансировщика:
+
 
 ```
 </html>mpalgin@mpalgin-VirtualBox:~$ curl -v 158.160.136.130:80
