@@ -4,6 +4,70 @@ https://github.com/MPalgin/Sys_adm_HW/blob/main/Terraform_diplom.md
 Ansible playbook:
 
 https://github.com/MPalgin/Sys_adm_HW/tree/main/service_install
+Сервисы на VM разворачивались на локальной VM с помощью настройки с /etc/hosts на локальной VM и на VM выступающей в качестве бастион хоста:
+
+локальная VM
+
+```
+51.250.92.135 secvm.ru-central1.internal
+172.16.18.26 webvm2.ru-central1.internal
+158.160.125.94 zabbix-vm.ru-central1.internal
+158.160.127.250 elastic-vm.ru-central1.internal
+158.160.113.33 kibana-vm.ru-central1.internal
+172.16.16.16 webvm1.ru-central1.internal
+
+```
+Бастион VM:
+
+```
+172.16.18.26 webvm2.ru-central1.internal
+158.160.125.94 zabbix-vm.ru-central1.internal
+158.160.127.250 elastic-vm.ru-central1.internal
+158.160.113.33 kibana-vm.ru-central1.internal
+172.16.16.16 webvm1.ru-central1.internal
+
+```
+
+Ansible заходил на хосты с nginx с помощью проксси настроенной в inventory файле и fqdn:
+
+```
+[proxy]
+secvm.ru-central1.internal
+
+[web_hosts:children]
+web1
+web2
+
+[web1]
+webvm1.ru-central1.internal ansible_user=user
+
+[web2]
+webvm2.ru-central1.internal ansible_user=user
+
+[zabbix_server:children]
+zabbix_host
+
+[zabbix_host]
+zabbix-vm.ru-central1.internal ansible_user=user
+
+[elastic_server]
+elastic-vm.ru-central1.internal ansible_user=user
+
+
+[kibana_server]
+kibana-vm.ru-central1.internal ansible_user=user
+
+[web_hosts:vars]
+ansible_ssh_common_args='-o ProxyCommand="ssh -p 22 -W %h:%p -q user@secvm.ru-central1.internal"'
+```
+Роли для elastic, filebeat, kibana и zabbix были звяты с ansible-galaxy и установлены через командную строку(zabbix-comunity) и с помощью requirements.yml файла для ролей geerlingguy.kibana, geerlingguy.elasticsearch, geerlingguy.postgresql, geerlingguy.filebeat. Nginx был установлен без ansible-galaxy. Nginx работает:
+
+![image](https://github.com/MPalgin/Sys_adm_HW/assets/121052923/543d65d3-8603-4b99-842b-c50a0b9bdf3c)
+
+![image](https://github.com/MPalgin/Sys_adm_HW/assets/121052923/2752ae8f-c14c-4a1f-b787-a6b7e2fbdd66)
+
+Доступность проверялась с помощью ssh туннелей.
+
 Проверка работы балансировщика:
 
 ```
