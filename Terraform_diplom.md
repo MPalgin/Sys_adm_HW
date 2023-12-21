@@ -83,7 +83,8 @@ resource "yandex_compute_instance" "zabbix-vm" {
 
   network_interface {
     subnet_id = yandex_vpc_subnet.bastion-external-segment.id
-    nat       = false
+    nat       = true
+    security_group_ids = [yandex_vpc_security_group.zabbix-server-sg.id]
   }
 
   metadata = {
@@ -94,8 +95,8 @@ resource "yandex_compute_instance" "elastic-vm" {
   name = "elastic-vm"
   zone           = "ru-central1-a"
   resources {
-    cores  = 2
-    memory = 2
+    cores  = 4
+    memory = 8
   }
 
   boot_disk {
@@ -106,7 +107,8 @@ resource "yandex_compute_instance" "elastic-vm" {
 
   network_interface {
     subnet_id = yandex_vpc_subnet.bastion-internal-segment-zonea.id
-    nat       = false
+    nat       = true
+    security_group_ids = [yandex_vpc_security_group.elastic-server-sg.id]
   }
 
   metadata = {
@@ -117,8 +119,8 @@ resource "yandex_compute_instance" "kibana-vm" {
   name = "kibana-vm"
   zone           = "ru-central1-a"
   resources {
-    cores  = 2
-    memory = 2
+    cores  = 4
+    memory = 8
   }
 
   boot_disk {
@@ -129,7 +131,8 @@ resource "yandex_compute_instance" "kibana-vm" {
 
   network_interface {
     subnet_id = yandex_vpc_subnet.bastion-external-segment.id
-    nat       = false
+    nat       = true
+    security_group_ids = [yandex_vpc_security_group.kibana-server-sg.id]
   }
 
   metadata = {
@@ -178,17 +181,149 @@ resource "yandex_vpc_security_group" "secure-bastion-sg"{
   }
 }
 
+resource "yandex_vpc_security_group" "zabbix-server-sg"{
+  name = "zabbix-server-sg"
+  network_id     = yandex_vpc_network.external-bastion-network.id
+  ingress{
+    from_port = 22
+    to_port = 22
+    protocol = "tcp"
+    v4_cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress{
+    from_port = 80
+    to_port = 80
+    protocol = "tcp"
+    v4_cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress{
+    from_port = 443
+    to_port = 443
+    protocol = "tcp"
+    v4_cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress{
+    from_port = 10050
+    to_port = 10051
+    protocol = "tcp"
+    v4_cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress{
+    from_port = 162
+    to_port = 162
+    protocol = "udp"
+    v4_cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress{
+    from_port = 53
+    to_port = 53
+    protocol = "udp"
+    v4_cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress{
+    from_port = 123
+    to_port = 123
+    protocol = "udp"
+    v4_cidr_blocks = ["0.0.0.0/0"]
+  }
+  egress{
+    from_port = 0
+    to_port = 65535
+    protocol = "any"
+    v4_cidr_blocks = ["0.0.0.0/0"]
+
+  }
+}
+resource "yandex_vpc_security_group" "elastic-server-sg"{
+  name = "elastic-server-sg"
+  network_id     = yandex_vpc_network.external-bastion-network.id
+  ingress{
+    from_port = 22
+    to_port = 22
+    protocol = "tcp"
+    v4_cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress{
+    from_port = 80
+    to_port = 80
+    protocol = "tcp"
+    v4_cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress{
+    from_port = 443
+    to_port = 443
+    protocol = "tcp"
+    v4_cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress{
+    from_port = 9200
+    to_port = 9200
+    protocol = "tcp"
+    v4_cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress{
+    from_port = 9300
+    to_port = 9300
+    protocol = "udp"
+    v4_cidr_blocks = ["0.0.0.0/0"]
+  }
+  egress{
+    from_port = 0
+    to_port = 65535
+    protocol = "any"
+    v4_cidr_blocks = ["0.0.0.0/0"]
+
+  }
+}
+resource "yandex_vpc_security_group" "kibana-server-sg"{
+  name = "kibana-server-sg"
+  network_id     = yandex_vpc_network.external-bastion-network.id
+  ingress{
+    from_port = 22
+    to_port = 22
+    protocol = "tcp"
+    v4_cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress{
+    from_port = 80
+    to_port = 80
+    protocol = "tcp"
+    v4_cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress{
+    from_port = 443
+    to_port = 443
+    protocol = "tcp"
+    v4_cidr_blocks = ["0.0.0.0/0"]
+  }
+  ingress{
+    from_port = 5601
+    to_port = 5601
+    protocol = "tcp"
+    v4_cidr_blocks = ["0.0.0.0/0"]
+  }
+  egress{
+    from_port = 0
+    to_port = 65535
+    protocol = "any"
+    v4_cidr_blocks = ["0.0.0.0/0"]
+
+  }
+}
+
 resource "yandex_vpc_subnet" "bastion-internal-segment-zonea" {
   name           = "bastion-internal-segment-zonea"
   zone           = "ru-central1-a"
   network_id     = yandex_vpc_network.external-bastion-network.id
   v4_cidr_blocks = ["172.16.16.0/24"]
+  route_table_id = yandex_vpc_route_table.nat-instance-route.id
 }
 resource "yandex_vpc_subnet" "bastion-internal-segment-zoneb" {
   name           = "bastion-internal-segment-zoneb"
   zone           = "ru-central1-b"
   network_id     = yandex_vpc_network.external-bastion-network.id
   v4_cidr_blocks = ["172.16.18.0/24"]
+  route_table_id = yandex_vpc_route_table.nat-instance-route.id
 }
 
 resource "yandex_vpc_route_table" "nat-instance-route" {
@@ -196,7 +331,7 @@ resource "yandex_vpc_route_table" "nat-instance-route" {
   network_id = yandex_vpc_network.external-bastion-network.id
   static_route {
     destination_prefix = "0.0.0.0/0"
-    next_hop_address   = yandex_compute_instance.nat-instance.network_interface.0.ip_address
+    next_hop_address   = yandex_compute_instance.secvm.network_interface.0.ip_address
   }
 }
 
