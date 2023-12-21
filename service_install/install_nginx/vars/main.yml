@@ -1,0 +1,3 @@
+---
+# vars file for install_apache2
+destin_folder: /var/www/html

@@ -1,0 +1,21 @@
+---
+# tasks file for install_apache2
+  - name: Install nginx 
+    apt:
+      name: nginx
+      state: present
+  - name: Copy files
+    template:
+      src: "files/index.html.j2"
+      dest: "/var/www/html/index.html"
+  - name: "Allow HTTP on port 80"
+    ufw:
+      rule: allow
+      port: 80
+      proto: tcp
+  - name: Check connection
+    uri: 
+      url: http://localhost:80
+
+
+  

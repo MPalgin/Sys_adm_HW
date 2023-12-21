@@ -1,0 +1,9 @@
+<html>
+
+<h4>CPU: {{ ansible_processor }}</h4>
+
+<h4>RAM: {{ ansible_facts['memory_mb']['real']['total']}}</h4>
+
+<h4>IP_ADRESS: {{ ansible_facts['default_ipv4']['address'] }}</h4>
+
+</html>

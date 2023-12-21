@@ -1,0 +1,37 @@
+- hosts: web_hosts
+  become: true
+  gather_facts: true
+  roles:
+    - install_nginx
+    - geerlingguy.filebeat
+  tasks:
+    - name: Install agent
+      include_role:
+        name: community.zabbix.zabbix_agent
+      tags:
+        - Install
+- hosts: zabbix_host
+  become: true
+  gather_facts: true
+  roles:
+      - role: geerlingguy.postgresql
+        become: true
+- hosts: zabbix_host
+  become: true
+  gather_facts: true
+  roles:
+      - install_acl
+      - role: community.zabbix.zabbix_server
+        zabbix_server_database_long: postgresql
+        zabbix_server_dbuser: zabbix
+        zabbix_server_dbpassword: "123456789"
+- hosts: elastic_server
+  become: true
+  gather_facts: true
+  roles:
+      - geerlingguy.elasticsearch
+- hosts: kibana_server
+  become: true
+  gather_facts: true
+  roles:
+      - geerlingguy.kibana
