@@ -128,7 +128,7 @@ http://158.160.113.33:5601/app/discover#/?_g=(filters:!(),refreshInterval:(pause
 Расписание создания snapshot дисков:
 
 ```
-resource "yandex_compute_snapshot_schedule" "vm_sceduler" {
+resource "yandex_compute_snapshot_schedule" "vm-sceduler" {
   name           = "vm-sceduler"
 
   schedule_policy {
