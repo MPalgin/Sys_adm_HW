@@ -116,6 +116,9 @@ Pass:zabbix
 
 ![image](https://github.com/MPalgin/Sys_adm_HW/assets/121052923/44f7f9f6-95e6-4ba1-b1cc-81b202d998c4)
 
+![image](https://github.com/MPalgin/Sys_adm_HW/assets/121052923/cf0892c3-a4dc-4d9d-b3a6-d842db189f56)
+
+
 elastic_server:
 
 http://158.160.113.33:5601/app/discover#/?_g=(filters:!(),refreshInterval:(pause:!t,value:60000),time:(from:now-15m,to:now))&_a=(columns:!(),filters:!(),index:'463eaf74-f060-4100-9ff1-9d8d2b63afc4',interval:auto,query:(language:kuery,query:''),sort:!(!('@timestamp',desc)))
