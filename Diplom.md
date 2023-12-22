@@ -5,29 +5,6 @@ https://github.com/MPalgin/Sys_adm_HW/blob/main/main.tf
 Ansible playbook:
 
 https://github.com/MPalgin/Sys_adm_HW/tree/main/service_install
-Сервисы на VM разворачивались на локальной VM с помощью настройки с /etc/hosts на локальной VM и на VM выступающей в качестве бастион хоста:
-
-локальная VM
-
-```
-51.250.92.135 secvm.ru-central1.internal
-172.16.18.26 webvm2.ru-central1.internal
-158.160.125.94 zabbix-vm.ru-central1.internal
-158.160.127.250 elastic-vm.ru-central1.internal
-158.160.113.33 kibana-vm.ru-central1.internal
-172.16.16.16 webvm1.ru-central1.internal
-
-```
-Бастион VM:
-
-```
-172.16.18.26 webvm2.ru-central1.internal
-158.160.125.94 zabbix-vm.ru-central1.internal
-158.160.127.250 elastic-vm.ru-central1.internal
-158.160.113.33 kibana-vm.ru-central1.internal
-172.16.16.16 webvm1.ru-central1.internal
-
-```
 
 Ansible заходил на хосты с nginx с помощью прокси настроенной в inventory файле и fqdn:
 
