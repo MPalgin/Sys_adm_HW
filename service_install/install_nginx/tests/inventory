@@ -1,28 +1,32 @@
-[proxy]
-secvm.ru-central1.internal
+[all_hosts:children]
+web1
+web2
+zabbix_host
+elastic_server
+kibana_server
 
 [web_hosts:children]
 web1
 web2
 
 [web1]
-webvm1.ru-central1.internal ansible_user=user
+fhm4ld3fgkf8daddda7o.auto.internal ansible_user=user
 
 [web2]
-webvm2.ru-central1.internal ansible_user=user
+epdonr7m16cucsmktc9t.auto.internal ansible_user=user
 
 [zabbix_server:children]
 zabbix_host
 
 [zabbix_host]
-zabbix-vm.ru-central1.internal ansible_user=user
+fhmjevln6o637vgu8472.auto.internal ansible_user=user
 
 [elastic_server]
-elastic-vm.ru-central1.internal ansible_user=user
+fhmg8hs0p9kgiunfdiqk.auto.internal ansible_user=user
 
 
 [kibana_server]
-kibana-vm.ru-central1.internal ansible_user=user
+fhmmru9g2un8nfhmhqau.auto.internal ansible_user=user
 
-[web_hosts:vars]
-ansible_ssh_common_args='-o ProxyCommand="ssh -p 22 -W %h:%p -q user@secvm.ru-central1.internal"'
+[all_hosts:vars]
+ansible_ssh_common_args='-o ProxyCommand="ssh -p 22 -W %h:%p -q user@51.250.92.135"'
