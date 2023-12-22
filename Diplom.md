@@ -28,38 +28,10 @@ https://github.com/MPalgin/Sys_adm_HW/tree/main/service_install
 
 ```
 
-Ansible заходил на хосты с nginx с помощью проксси настроенной в inventory файле и fqdn:
+Ansible заходил на хосты с nginx с помощью прокси настроенной в inventory файле и fqdn:
 
-```
-[proxy]
-secvm.ru-central1.internal
+![image](https://github.com/MPalgin/Sys_adm_HW/assets/121052923/7cf23e74-4716-4228-afdf-a65f14fc43b2)
 
-[web_hosts:children]
-web1
-web2
-
-[web1]
-webvm1.ru-central1.internal ansible_user=user
-
-[web2]
-webvm2.ru-central1.internal ansible_user=user
-
-[zabbix_server:children]
-zabbix_host
-
-[zabbix_host]
-zabbix-vm.ru-central1.internal ansible_user=user
-
-[elastic_server]
-elastic-vm.ru-central1.internal ansible_user=user
-
-
-[kibana_server]
-kibana-vm.ru-central1.internal ansible_user=user
-
-[web_hosts:vars]
-ansible_ssh_common_args='-o ProxyCommand="ssh -p 22 -W %h:%p -q user@secvm.ru-central1.internal"'
-```
 Роли для elastic, filebeat, kibana и zabbix были звяты с ansible-galaxy и установлены через командную строку(zabbix-comunity) и с помощью requirements.yml файла для ролей geerlingguy.kibana, geerlingguy.elasticsearch, geerlingguy.postgresql, geerlingguy.filebeat. Nginx был установлен без ansible-galaxy. Nginx работает:
 
 ![image](https://github.com/MPalgin/Sys_adm_HW/assets/121052923/543d65d3-8603-4b99-842b-c50a0b9bdf3c)
