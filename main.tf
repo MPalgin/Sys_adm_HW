@@ -446,7 +446,7 @@ output "external_ip_address_vm_1" {
   value = yandex_compute_instance.webvm1.network_interface.0.nat_ip_address
 }
 
-resource "yandex_compute_snapshot_schedule" "vm_sceduler" {
+resource "yandex_compute_snapshot_schedule" "vm-sceduler" {
   name           = "vm-sceduler"
 
   schedule_policy {
