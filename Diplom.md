@@ -1,5 +1,6 @@
 Код терраформ:
-https://github.com/MPalgin/Sys_adm_HW/blob/main/Terraform_diplom.md
+
+https://github.com/MPalgin/Sys_adm_HW/blob/main/main.tf
 
 Ansible playbook:
 
