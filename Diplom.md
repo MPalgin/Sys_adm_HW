@@ -127,8 +127,19 @@ http://158.160.113.33:5601/app/discover#/?_g=(filters:!(),refreshInterval:(pause
 
 Расписание создания snapshot дисков:
 
-![image](https://github.com/MPalgin/Sys_adm_HW/assets/121052923/4d809fc2-3aa4-4748-ab26-90622aba1027)
+```
+resource "yandex_compute_snapshot_schedule" "vm_sceduler" {
+  name           = "vm-sceduler"
 
+  schedule_policy {
+	expression = "0 0 ? * *"
+  }
+
+  snapshot_count = 7
+
+  disk_ids = ["yandex_compute_instance.secvm.boot_disk.id", "yandex_compute_instance.webvm1.boot_disk.id", "yandex_compute_instance.elastic-vm.boot_disk.id", "yandex_compute_instance.kibana-vm.boot_disk.id", "yandex_compute_instance.zabbix-vm.boot_disk.id"]
+
+```
 
 
 
