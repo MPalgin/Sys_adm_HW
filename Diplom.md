@@ -1,3 +1,14 @@
+OAuth токен:
+
+После отзыва стаорого токена и выполнения команды terraform plan:
+
+![image](https://github.com/MPalgin/Sys_adm_HW/assets/121052923/a44159c2-d0cf-4ca1-808c-cf941e973622)
+
+С новым токеном:
+
+![image](https://github.com/MPalgin/Sys_adm_HW/assets/121052923/d8d98072-1441-4361-b8be-dcba29b7c76b)
+
+
 Код терраформ:
 
 https://github.com/MPalgin/Sys_adm_HW/blob/main/main.tf
