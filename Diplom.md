@@ -4,11 +4,7 @@ OAuth токен:
 
 ![image](https://github.com/MPalgin/Sys_adm_HW/assets/121052923/a44159c2-d0cf-4ca1-808c-cf941e973622)
 
-С новым токеном:
-
-![image](https://github.com/MPalgin/Sys_adm_HW/assets/121052923/d8d98072-1441-4361-b8be-dcba29b7c76b)
-
-Terraform plan без токена в main.tf работает, ошибок нет:
+После выпуска нового токена и без указания его в main.tf Terraform plan работает, ошибок нет:
 
 ![image](https://github.com/MPalgin/Sys_adm_HW/assets/121052923/0cf864f4-858f-4f8e-bd1f-c68d22d4dfdc)
 
