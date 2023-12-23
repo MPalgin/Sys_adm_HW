@@ -8,6 +8,10 @@ OAuth токен:
 
 ![image](https://github.com/MPalgin/Sys_adm_HW/assets/121052923/d8d98072-1441-4361-b8be-dcba29b7c76b)
 
+Terraform plan без токена в main.tf работает, ошибок нет:
+
+![image](https://github.com/MPalgin/Sys_adm_HW/assets/121052923/8eb6e576-f815-4ef6-848e-2e72d500d606)
+
 
 Код терраформ:
 
