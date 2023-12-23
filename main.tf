@@ -4,8 +4,13 @@ terraform {
       source = "yandex-cloud/yandex"
     }
   }
+  required_version = ">= 0.13"
 }
 
+provider "yandex" {
+  zone = "ru-central1-a"
+  service_account_key_file = "key.json"
+}
 
 
 
