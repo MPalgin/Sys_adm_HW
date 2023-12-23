@@ -10,7 +10,7 @@ OAuth токен:
 
 Terraform plan без токена в main.tf работает, ошибок нет:
 
-![image](https://github.com/MPalgin/Sys_adm_HW/assets/121052923/8eb6e576-f815-4ef6-848e-2e72d500d606)
+![image](https://github.com/MPalgin/Sys_adm_HW/assets/121052923/0cf864f4-858f-4f8e-bd1f-c68d22d4dfdc)
 
 
 Код терраформ:
